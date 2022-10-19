@@ -136,7 +136,7 @@ router.get('/unfollow/:id', verifyAuth, async (req, res) => {
     }
 })
 
-// GET | /api/v1/post/profile/:id| Private | get a users profile by iD
+// GET | /api/v1/post/profile/:id| public | get a users profile by iD
 router.get('/profile/:id', async (req, res) => {
     try {
         const user = await User.findById(req.params.id).populate('posts')
