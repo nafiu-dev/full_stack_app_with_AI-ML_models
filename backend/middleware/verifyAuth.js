@@ -8,7 +8,7 @@ module.exports = (req, res,next) => {
         return res.status(401).json({ 
             msg: 'no Token, access denied',
             success: false
-        })
+        }) 
     }
 
     try {

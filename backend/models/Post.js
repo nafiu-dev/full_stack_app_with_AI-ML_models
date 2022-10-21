@@ -8,7 +8,6 @@ let PostSchema = new mongoose.Schema({
     },
     post_image: {
         type: String,
-        default: '/public/uploads/no_image.jpg'
     },
     description: {
         type: String,
