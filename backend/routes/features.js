@@ -64,26 +64,26 @@ router.get('/unlike/:id', verifyAuth, async (req, res) => {
 // GET | /api/v1/post/follow/:id| Private | follow a User
 router.get('/follow/:id', verifyAuth, async (req, res) => {
     try {
-const followed = await User.updateOne(
-    {
-        _id: req.user.id 
-    },
-    {
-        $push: {
-            following:  req.params.id 
-        }
-    }
-    )
-    
-    const followersAdded = await User.updateOne(
-        {
-            _id: req.params.id
-        },
-        {
-            $push: {
-                followers:  req.user.id
+        const followed = await User.updateOne(
+            {
+                _id: req.user.id 
+            },
+            {
+                $push: {
+                    following:  req.params.id 
+                }
             }
-        }
+        )
+    
+        const followersAdded = await User.updateOne(
+            {
+                _id: req.params.id
+            },
+            {
+                $push: {
+                    followers:  req.user.id
+                }
+            }
         
         )
         
