@@ -2,6 +2,8 @@ const router = require('express').Router()
 
 const Post = require('../models/Post')
 const User = require('../models/User')
+const Comment = require('../models/Comment')
+
 const verifyAuth = require('../middleware/verifyAuth')
 
 
@@ -139,8 +141,13 @@ router.get('/unfollow/:id', verifyAuth, async (req, res) => {
 // GET | /api/v1/post/profile/:id| public | get a users profile by iD
 router.get('/profile/:id', async (req, res) => {
     try {
-        const user = await User.findById(req.params.id).populate('posts')
-        
+        const user = await User.findById(req.params.id).populate({
+            // deep populate
+            path: 'posts',
+            populate : {
+                path : 'comments'
+            }
+        })
         if(!user){
             return res.status(401).json({success: false})
         }
@@ -154,5 +161,30 @@ router.get('/profile/:id', async (req, res) => {
     }
 })
 
+// GET | /api/v1/post/comment/:id| Private | add a comment to a post
+router.post('/post/comment/:id', verifyAuth,async (req, res) => {
+    try {
+        const comment = await Comment.create({
+            PostId: req.params.id,
+            comment: req.body.comment,
+            UserId: req.user.id,
+        })
+        
+        if (!comment) {
+            return res.status(400).json({
+                success: false
+            })
+        }
+
+        
+        res.status(200).json({
+            data: comment,
+            success: true
+        })
+    } catch (err) {
+        console.log(err)
+        res.status(400).json({success: false})
+    }
+})
 
 module.exports = router 

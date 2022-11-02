@@ -96,7 +96,7 @@ router.post('/login', async (req, res) => {
 // GET api/v1/user | private | get logged in user for the process of auth
 router.get('/user', verifyAuth,  async (req, res) => {
     try {
-        const user = await User.findById(req.user.id).populate('posts')
+        
         res.status(200).json({
             user,
             success: true

@@ -38,6 +38,14 @@ PostSchema.pre('save', async function (next) {
     this.created_at = await date_into
 })
 
+
+PostSchema.virtual('comments', {
+    ref: 'comment',
+    localField: '_id',
+    foreignField: 'PostId',
+    justOne: false
+})
+
 PostSchema.virtual('posted_by', {
     ref: 'user',
     localField: 'UserId',

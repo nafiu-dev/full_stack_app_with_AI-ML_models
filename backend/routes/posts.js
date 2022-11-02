@@ -11,7 +11,8 @@ const verifyAuth = require('../middleware/verifyAuth')
 // GET | /api/v1/posts | public | get all posts 
 router.get('/posts', async (req, res) => {
     try {
-        const posts = await Post.find()
+        const posts = await Post.find().populate('comments').populate('posted_by')
+
         return res.status(200).json({
             data: posts,
             success: true
@@ -28,8 +29,8 @@ router.get('/followers-posts', verifyAuth, async (req, res) => {
     try {
         const get_user = await User.findById(req.user.id)
 
-        const posts  = await Post.find({UserId: get_user.following}).populate('posted_by')
-     
+        const posts  = await Post.find({UserId: get_user.following}).populate('comments').populate('posted_by')
+
         res.status(200).json({
             data: posts,
             success: true
@@ -44,7 +45,8 @@ router.get('/followers-posts', verifyAuth, async (req, res) => {
 // GET | /api/v1/post/:id | public | get a single post by id
 router.get('/post/:id', async (req, res) => {
     try {
-        const post  = await Post.findById(req.params.id)
+        const post  = await Post.findById(req.params.id).populate('comments')
+
 
 
         if(!post){
