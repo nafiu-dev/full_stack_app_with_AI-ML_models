@@ -3,15 +3,16 @@ const router = require('express').Router()
 // Models
 const Post = require('../models/Post')
 const User = require('../models/User')
-
 // MIDDLEWARE
 const verifyAuth = require('../middleware/verifyAuth')
+
 
 
 // GET | /api/v1/posts | public | get all posts 
 router.get('/posts', async (req, res) => {
     try {
-        const posts = await Post.find().populate('comments').populate('posted_by')
+        // populate
+        const posts = await Post.find().populate('comments').populate('posted_by') 
 
         return res.status(200).json({
             data: posts,
@@ -29,6 +30,7 @@ router.get('/followers-posts', verifyAuth, async (req, res) => {
     try {
         const get_user = await User.findById(req.user.id)
 
+        // populate
         const posts  = await Post.find({UserId: get_user.following}).populate('comments').populate('posted_by')
 
         res.status(200).json({
@@ -124,6 +126,7 @@ router.put('/edit-post/:id', verifyAuth, async (req, res) =>{
 router.delete('/delete-post/:id',verifyAuth, async (req, res) =>{
     try {
         const post = await Post.findById(req.params.id)
+
         if (!post) {
             return res.status(400).json({
                 success: false
